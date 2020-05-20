@@ -3,31 +3,38 @@
         protected $accountId, $balance, $startDate;
         
         public function __construct ($id, $b, $sd) {
-           // write code here
+           $this->accountId = $id;
+           $this->balance = $b;
+           $this->startDate = $sd;
         }
         public function deposit ($amount) {
             // write code here
+            $this->balance += $amount;
         }
 
         abstract public function withdrawal($amount);
         // this is an abstract method. This method must be defined in all classes
         // that inherit from this class
         public function getStartDate() {
-            // write code here
+            return $this->startDate;
         }
 
         public function getBalance() {
-            // write code here
+            return $this->balance;
         }
 
         public function getAccountId() {
-            // write code here
+            return $this->accountId;
         }
 
         protected function getAccountDetails() {
             // populate $str with the account details
+            $str = "";
+            $str .= $this->accountId . " ";
+            $str .= $this->balance . " ";
+            $str .= $this->startDate . " ";
             
-            //return $str;
+            return $str;
         }
     }
 
@@ -35,7 +42,17 @@
         const OVERDRAW_LIMIT = -200;
 
         public function withdrawal($amount) {
-            // write code here. Return true if withdrawal goes through; false otherwise
+            // write code here. Return true if withdrawal goes through; false otherwise           
+            
+            if($this->balance - $amount > self::OVERDRAW_LIMIT){
+                $withdraw = true;
+                $this->balance-=$amount; 
+            }
+            else{
+                $withdraw = false;                
+            }
+            
+            return $withdraw;
         }
 
         //freebie. I am giving you this code.
@@ -51,10 +68,22 @@
 
         public function withdrawal($amount) {
             // write code here. Return true if withdrawal goes through; false otherwise
+            if($this->balance - $amount > 0){
+                $withdraw = true;
+                $this->balance-=$amount; 
+            }
+            else{
+                $withdraw = false;                
+            }
+            
+            return $withdraw;
         }
 
         public function getAccountDetails() {
-           // look at how it's defined in other class. You should be able to figure this out ...
+            $str = "<h2>Savings Account</h2>";
+            $str .= parent::getAccountDetails();
+            
+            return $str;
         }
     }
 
@@ -64,9 +93,11 @@
     $checking->deposit(500);
 
     $savings = new SavingsAccount('S123', 5000, '03-20-2020');
-    
+    $savings->deposit(500);
+    $savings->withdrawal(2000);
+
     echo $checking->getAccountDetails();
     echo $savings->getAccountDetails();
-    echo $checking->getStartDate();
+    
     
 ?>
