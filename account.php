@@ -30,9 +30,9 @@
         protected function getAccountDetails() {
             // populate $str with the account details
             $str = "";
-            $str .= $this->accountId . " ";
-            $str .= $this->balance . " ";
-            $str .= $this->startDate . " ";
+            $str .= "Account ID:" . " "  . $this->accountId . "<br>";
+            $str .= "Balance:" . " "  . $this->balance . "<br>";
+            $str .= "Account Opened:" . " "  . $this->startDate . "<br>";
             
             return $str;
         }
@@ -86,18 +86,74 @@
             return $str;
         }
     }
-
     
+    
+/*
     $checking = new CheckingAccount ('C123', 1000, '12-20-2019');
+    $savings = new SavingsAccount('S123', 5000, '03-20-2020');
+
+    $checkingBalance = $savingBalance =
+    $checkingAccountID =  $checkingStartDate = $savingAccountID = $savingStartDate = "";
+*/
+    $checkingDeposit = $checkingWithdraw = $savingsDeposit = $savingsWithdraw = 0 ;
+    
+
+
+    //CHECKING ACCOUNT
+    if (isset($_POST["checkings_withdrawbtn"]))
+    {
+        $checkingWithdraw = filter_input(INPUT_POST, "checkings_withdraw_amount", FILTER_VALIDATE_FLOAT);
+        $checkingAccountID = filter_input(INPUT_POST, "c_accountID");
+        $checkingBalance = filter_input(INPUT_POST, "c_balance",FILTER_VALIDATE_FLOAT);
+        $checkingStartDate = filter_input(INPUT_POST, "c_startDate");
+        $checking->withdrawal($checkingWithdraw);
+        
+    }
+    if (isset($_POST["checkings_depositbtn"]))
+    {
+        $checkingDeposit = filter_input(INPUT_POST, "checkings_deposit_amount", FILTER_VALIDATE_FLOAT);
+        $checkingAccountID = filter_input(INPUT_POST, "c_accountID");
+        $checkingBalance = filter_input(INPUT_POST, "c_balance",FILTER_VALIDATE_FLOAT);
+        $checkingStartDate = filter_input(INPUT_POST, "c_startDate");
+        $checking->deposit($checkingDeposit);
+    }
+
+    //SAVINGS ACCOUNT
+    if (isset($_POST["savings_withdrawbtn"]))
+    {
+        $savingsWithdraw = filter_input(INPUT_POST, "savings_withdraw_amount", FILTER_VALIDATE_FLOAT);        
+        $savingAccountID = filter_input(INPUT_POST, "s_accountID");
+        $savingBalance = filter_input(INPUT_POST, "s_balance",FILTER_VALIDATE_FLOAT);
+        $savingStartDate = filter_input(INPUT_POST, "s_startDate");
+        $savings->withdrawal($savingsWithdraw);
+    }
+    if (isset($_POST["savings_depositbtn"]))
+    {
+        $savingsDeposit = filter_input(INPUT_POST, "savings_deposit_amount", FILTER_VALIDATE_FLOAT);
+        $savingAccountID = filter_input(INPUT_POST, "s_accountID");
+        $savingBalance = filter_input(INPUT_POST, "s_balance",FILTER_VALIDATE_FLOAT);
+        $savingStartDate = filter_input(INPUT_POST, "s_startDate");
+        $savings->deposit($savingsDeposit);
+    }
+
+    $checking = new CheckingAccount ($checkingAccountID, $checkingBalance, $checkingStartDate);
+    $savings = new SavingsAccount($savingAccountID , $savingBalance, $savingStartDate);
+
+
+
+
+
+    /* Testing purpose ################
     $checking->withdrawal(200);
     $checking->deposit(500);
 
-    $savings = new SavingsAccount('S123', 5000, '03-20-2020');
+    
     $savings->deposit(500);
     $savings->withdrawal(2000);
 
+    
     echo $checking->getAccountDetails();
-    echo $savings->getAccountDetails();
+    echo $savings->getAccountDetails(); */
     
     
 ?>
